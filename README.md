@@ -88,3 +88,28 @@ $.ajax(settings).done(function (response) {
   console.log(response);
 });
 ```
+
+python requests  
+```
+import requests
+
+url = "http://typecho/action/oneapi"
+
+payload = {'route': 'postarticle',
+'sign': '2ge8ddqphlts2ofhrx0t32j6qp',
+'title': '测试title',
+'text': 'content text',
+'articleType': 'default',
+'categorymid': '1'}
+files = [
+
+]
+headers = {
+  'Content-Type': 'application/x-www-form-urlencoded',
+}
+
+response = requests.request("POST", url, headers=headers, data = payload, files = files)
+
+print(response.text.encode('utf8'))
+
+```
