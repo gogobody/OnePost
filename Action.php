@@ -47,10 +47,9 @@ class OnePost_Action extends Widget_Abstract_Contents implements Widget_Interfac
             array(
                 'title'=>$title,
                 'text'=>$text,
-                'fieldNames'=>array(),
-                'fieldTypes'=>array(),
-                'fieldValues'=>array(),
-                'articleType'=> $articleType,
+                'fieldNames'=>array('articleType'),
+                'fieldTypes'=>array('str'),
+                'fieldValues'=>array($articleType),
                 'cid'=>'',
                 'do'=>'publish',
                 'markdown'=>'1',
