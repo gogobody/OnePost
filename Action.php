@@ -1,7 +1,6 @@
 <?php
 
 
-
 class OnePost_Action extends Widget_Abstract_Contents implements Widget_Interface_Do
 {
 
@@ -10,31 +9,23 @@ class OnePost_Action extends Widget_Abstract_Contents implements Widget_Interfac
         // this action is for /action/oneapi
         $request = Typecho_Request::getInstance();
 
-        if ($request->isPost()){
+        if ($request->isPost()) {
             $funcs = $request->get("route");
-            if ($funcs == "postarticle"){
+            if ($funcs == "postarticle") {
                 $this->postArticle();
             }
         }
+//        header("HTTP/1.1 404 OK");
         echo "unhandled params";
     }
-    public function postArticle(){
-        $options = Typecho_Widget::widget('Widget_Options')->plugin('OnePost');
-        $user=$options->username;
-        $password=$options->password;
-        if (!$this->user->hasLogin()) {
-            var_dump($user);
-            var_dump($password);
-            echo "sdasd";
-            if (!$this->user->login($user, $password, true)) { //使用特定的账号登陆
-                die('登录失败');
-            }
-        }
 
+    public function postArticle()
+    {
+        $options = Typecho_Widget::widget('Widget_Options')->plugin('OnePost');
         $request = Typecho_Request::getInstance();
         $title = $request->get('title');
         $text = $request->get('text');
-        $key= $request->get('sign');
+        $key = $request->get('sign');
         $articleType = $request->get('articleType');
         $categoryMid = $request->get('categorymid');
         $signkey = $options->sign;
@@ -42,26 +33,39 @@ class OnePost_Action extends Widget_Abstract_Contents implements Widget_Interfac
         if ($key != $signkey) {
             die("验证失败");
         }
+        // login user auth
+        if ($request->get('username')) {
+            $user = $request->get('username');
+            $password = $request->get('password');
+        } else {
+            $user = $options->username;
+            $password = $options->password;
+        }
+        if (!$this->user->hasLogin()) {
+            if (!$this->user->login($user, $password, true)) { //使用特定的账号登陆
+                die('登录失败');
+            }
+        }
         //填充文章的相关字段信息。
         $request->setParams(
             array(
-                'title'=>$title,
-                'text'=>$text,
-                'fieldNames'=>array('articleType'),
-                'fieldTypes'=>array('str'),
-                'fieldValues'=>array($articleType),
-                'cid'=>'',
-                'do'=>'publish',
-                'markdown'=>'1',
-                'date'=>'',
-                'category'=>array($categoryMid),
-                'tags'=>'',
-                'visibility'=>'publish',
-                'password'=>'',
-                'allowComment'=>'1',
-                'allowPing'=>'1',
-                'allowFeed'=>'1',
-                'trackback'=>'',
+                'title' => $title,
+                'text' => $text,
+                'fieldNames' => array('articleType'),
+                'fieldTypes' => array('str'),
+                'fieldValues' => array($articleType),
+                'cid' => '',
+                'do' => 'publish',
+                'markdown' => '1',
+                'date' => '',
+                'category' => array($categoryMid),
+                'tags' => '',
+                'visibility' => 'publish',
+                'password' => '',
+                'allowComment' => '1',
+                'allowPing' => '1',
+                'allowFeed' => '1',
+                'trackback' => '',
             )
         );
         //设置token，绕过安全限制
@@ -77,7 +81,7 @@ class OnePost_Action extends Widget_Abstract_Contents implements Widget_Interfac
         if ($reflectionWidget->implementsInterface('Widget_Interface_Do')) {
             $this->widget($widgetName)->action();
             echo 'Successful';
-        }else{
+        } else {
             echo 'error';
         }
     }

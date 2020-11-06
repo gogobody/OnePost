@@ -18,12 +18,16 @@ POST
 ## 参数
 参数：
 
+如果 post 参数中不设置用户名和密码的话会默认使用后台设置中设置的用户名和密码
+
 |参数名|必选|类型|说明|
 |:----    |:---|:----- |-----   |
 |route |  是  |    string   |    值为 postarticle   |
 |sign |  是  |    string   |    验证密钥 (后台设置的)  |
 |title |  是  |    string   |    标题   |
 |text |  是  |    string   |    正文   |
+|username |  否  |    string   |    使用哪个用户发送   |
+|password |  否  |    string   |    对应用户密码   |
 |articleType |  否  |    string   |    onecircle主题专用字段（没有不用配置）   |
 |categorymid |  否  |    string   |   分类mid     |
 |fieldnames |  否  |    反序列化数组   |    自定义字段名   |
